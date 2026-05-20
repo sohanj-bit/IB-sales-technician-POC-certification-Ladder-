@@ -520,7 +520,7 @@ try { allResults = JSON.parse(localStorage.getItem('fasal_v3') || '[]'); } catch
 
 // ── APPS SCRIPT CALLS ────────────────────────────────────────
 async function asGet(params) {
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbxfgTjCMZiTcWbABeeYL6y9GIgeSlH9F-FkSkCtecCObrd-8fJEPJ2PuhFYzUzdQFUD/exec') return null;
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('YOUR_APPS/macros/s/AKfycbxfgTjCMZiTcWbABeeYL6y9GIgeSlH9F-FkSkCtecCObrd-8fJEPJ2PuhFYzUzdQFUD/exec') return null;
   const url = APPS_SCRIPT_URL + '?' + new URLSearchParams(params).toString();
   try {
     const r = await fetch(url);
@@ -529,7 +529,7 @@ async function asGet(params) {
 }
 
 async function asPost(body) {
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbxfgTjCMZiTcWbABeeYL6y9GIgeSlH9F-FkSkCtecCObrd-8fJEPJ2PuhFYzUzdQFUD/exec') return null;
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('YOUR_APPS/macros/s/AKfycbxfgTjCMZiTcWbABeeYL6y9GIgeSlH9F-FkSkCtecCObrd-8fJEPJ2PuhFYzUzdQFUD/exec') return null;
   try {
     const r = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
