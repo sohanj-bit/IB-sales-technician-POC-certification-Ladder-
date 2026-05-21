@@ -520,7 +520,7 @@ try { allResults = JSON.parse(localStorage.getItem('fasal_v3') || '[]'); } catch
 
 // ── APPS SCRIPT CALLS ────────────────────────────────────────
 async function asGet(params) {
-  if (false) return null;
+  if (false)) return null;
   const url = APPS_SCRIPT_URL + '?' + new URLSearchParams(params).toString();
   try {
     const r = await fetch(url);
@@ -529,7 +529,7 @@ async function asGet(params) {
 }
 
 async function asPost(body) {
-  if (false) return null;
+  if (false)) return null;
   try {
     const r = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
@@ -898,20 +898,27 @@ function renderQ() {
   if (!q) return;
   const a = ans[curQ];
 
-  document.getElementById('q-num').textContent = `Q${curQ+1} of ${examQs.length}`;
-  document.getElementById('q-text').textContent = q.q;
+  // Update header counter (correct ID: q-count not q-num)
+  document.getElementById('q-count').textContent = `Q${curQ+1} of ${examQs.length}`;
 
-  const opts = document.getElementById('q-opts');
-  opts.innerHTML = q.o.map((opt, i) => `
-    <div class="opt ${a===i?'selected':''}" onclick="pick(${i})">
-      <div class="opt-key">${['A','B','C','D'][i]}</div>
-      <div class="opt-txt">${opt}</div>
-    </div>`).join('');
+  // Build question + options dynamically inside q-container
+  document.getElementById('q-container').innerHTML = `
+    <div class="q-text" style="font-size:16px;font-weight:600;color:#1a1a1a;line-height:1.6;padding:20px 24px 12px">${q.q}</div>
+    <div class="q-opts" id="q-opts" style="padding:0 16px 16px;display:flex;flex-direction:column;gap:10px">
+      ${q.o.map((opt, i) => `
+        <div class="opt ${a===i?'selected':''}" onclick="pick(${i})" style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;border:2px solid ${a===i?'var(--forest)':'#DDE8DD'};background:${a===i?'#E8F5E9':'#fff'};cursor:pointer;transition:.15s">
+          <div class="opt-key" style="width:28px;height:28px;border-radius:50%;background:${a===i?'var(--forest)':'#EEF3EE'};color:${a===i?'#fff':'var(--forest)'};font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0">${['A','B','C','D'][i]}</div>
+          <div class="opt-txt" style="font-size:14px;color:#333;line-height:1.4">${opt}</div>
+        </div>`).join('')}
+    </div>`;
 
-  document.getElementById('q-hint').textContent =
+  // Update nav hint (correct ID: nav-hint not q-hint)
+  document.getElementById('nav-hint').textContent =
     a === null ? t('nav_select') : a === -1 ? t('nav_skipped') : t('nav_answered');
 
   document.getElementById('btn-prev').style.display = curQ > 0 ? 'inline-flex' : 'none';
+  document.getElementById('btn-skip').style.display = a === null ? 'inline-flex' : 'none';
+  document.getElementById('btn-next').style.display = a !== null ? 'inline-flex' : 'none';
   document.getElementById('btn-next').textContent = curQ < examQs.length-1 ? 'Next →' : 'Submit';
 }
 
@@ -929,12 +936,22 @@ function jumpTo(i) { curQ = i; renderQ(); }
 
 function updateProgress() {
   const answered = ans.filter(a => a !== null && a !== -1).length;
-  const total = examQs.length;
-  const pct = Math.round((answered / total) * 100);
+  const skipped  = ans.filter(a => a === -1).length;
+  const total    = examQs.length;
+  const pct      = Math.round((answered / total) * 100);
+
   const fill = document.getElementById('prog-fill');
   if (fill) fill.style.width = pct + '%';
   const ct = document.getElementById('prog-ct');
   if (ct) ct.textContent = answered + ' / ' + total;
+
+  // Update submit strip counters
+  const ansEl = document.getElementById('ans-count');
+  if (ansEl) ansEl.textContent = answered;
+  const skipEl = document.getElementById('skip-count');
+  if (skipEl) skipEl.textContent = skipped;
+  const unansEl = document.getElementById('unans-count');
+  if (unansEl) unansEl.textContent = total - answered - skipped;
 }
 
 function updatePalette() {
