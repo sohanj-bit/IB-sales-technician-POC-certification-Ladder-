@@ -899,7 +899,6 @@ async function startModuleAtIdx(modIdx) {
   if (iconEl) iconEl.textContent = mod.icon;
 
   // Update module progress steps
-  const track = TRACKS[selectedTrack] || TRACKS.technician;
   const stepsEl = document.getElementById('mod-steps');
   if (stepsEl) {
     stepsEl.innerHTML = track.modules.map(mid => {
