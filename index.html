@@ -531,10 +531,12 @@ async function asGet(params) {
 async function asPost(body) {
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('YOUR_APPS')) return null;
   try {
+    // Use text/plain to avoid CORS preflight — Apps Script reads via e.postData.contents
     const r = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(body)
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(body),
+      redirect: 'follow'
     });
     return await r.json();
   } catch(e) { console.warn('AS POST failed:', e); return null; }
@@ -775,44 +777,52 @@ function renderLadder() {
       return modResults[prevIdx] && modResults[prevIdx].passed;
     })();
 
-    let badge, btnHtml, cardStyle = '';
+    let stateClass = '', badge, btnHtml;
     if (result && result.passed) {
-      badge = `<span class="mod-badge pass">${t('badge_pass')}</span>`;
-      btnHtml = `<button class="mod-btn pass-btn" onclick="startModuleAtIdx(${idx})">Review ↗</button>`;
-      cardStyle = 'border-color:#2E7D32;background:#F1F8E9';
+      stateClass = 'passed';
+      badge = `<span class="mod-badge badge-pass">${t('badge_pass')}</span>`;
+      btnHtml = `<button onclick="startModuleAtIdx(${idx})" style="padding:7px 14px;border-radius:7px;background:#E8F5E9;color:var(--forest);border:1.5px solid var(--leaf);font-family:DM Sans,sans-serif;font-size:11.5px;font-weight:600;cursor:pointer">Review ↗</button>`;
     } else if (!prevPassed) {
-      badge = `<span class="mod-badge lock">${t('badge_locked')}</span>`;
-      btnHtml = `<button class="mod-btn" disabled style="opacity:0.4;cursor:not-allowed">🔒 Locked</button>`;
-      cardStyle = 'opacity:0.7';
+      stateClass = 'locked';
+      badge = `<span class="mod-badge badge-locked">${t('badge_locked')}</span>`;
+      btnHtml = `<button disabled style="padding:7px 14px;border-radius:7px;background:#F5F5F5;color:var(--light);border:1.5px solid #E0E0E0;font-family:DM Sans,sans-serif;font-size:11.5px;cursor:not-allowed;opacity:.5">🔒 Locked</button>`;
     } else if (result && !result.passed) {
-      badge = `<span class="mod-badge fail">${t('badge_fail')}</span>`;
-      btnHtml = `<button class="mod-btn retry-btn" onclick="attemptModule(${idx})">↺ Retake</button>`;
-      cardStyle = 'border-color:#C62828;background:#FFF8F8';
+      stateClass = 'failed';
+      badge = `<span class="mod-badge badge-fail">${t('badge_fail')}</span>`;
+      btnHtml = `<button onclick="attemptModule(${idx})" style="padding:7px 14px;border-radius:7px;background:#FFEBEE;color:var(--fail);border:1.5px solid #EF9A9A;font-family:DM Sans,sans-serif;font-size:11.5px;font-weight:600;cursor:pointer">↺ Retake</button>`;
     } else {
-      badge = `<span class="mod-badge ready">${t('badge_ready')}</span>`;
-      btnHtml = `<button class="mod-btn start-btn" onclick="attemptModule(${idx})">Start →</button>`;
+      stateClass = '';
+      badge = `<span class="mod-badge badge-ready">${t('badge_ready')}</span>`;
+      btnHtml = `<button onclick="attemptModule(${idx})" style="padding:7px 14px;border-radius:7px;background:var(--forest);color:#fff;border:none;font-family:DM Sans,sans-serif;font-size:11.5px;font-weight:600;cursor:pointer">Start →</button>`;
     }
 
-    html += `<div class="mod-card" style="${cardStyle}">
-      <div class="mod-icon">${mod.icon}</div>
+    html += `<div class="module-item ${stateClass}">
+      <div class="mod-num" style="font-size:20px">${mod.icon}</div>
       <div class="mod-info">
         <div class="mod-name">${mod.id} — ${mod.name}</div>
-        ${result ? `<div class="mod-score">${result.score}/${result.total} (${result.pct}%) · ${result.date}</div>` : '<div class="mod-score">Not attempted yet</div>'}
+        <div class="mod-desc">${result ? `${result.score}/${result.total} (${result.pct}%) · ${result.date}` : 'Not attempted yet'}</div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px">${badge}${btnHtml}</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">${badge}${btnHtml}</div>
     </div>`;
   });
 
-  list.innerHTML = html;
-
-  // Check if all modules passed → show completion banner
+  // Check if all modules passed → append completion banner
   const track2 = TRACKS[selectedTrack] || TRACKS.technician;
   const allPassed = track2.modules.every(mid => {
     const idx = MODULES.findIndex(m => m.id === mid);
     return modResults[idx] && modResults[idx].passed;
   });
-  const banner = document.getElementById('completion-banner');
-  if (banner) banner.style.display = allPassed ? 'block' : 'none';
+
+  if (allPassed) {
+    html += `<div style="background:linear-gradient(135deg,#E8F5E9,#FFF8E1);border:2px solid var(--leaf);border-radius:14px;padding:22px;text-align:center;margin-top:8px">
+      <div style="font-size:40px;margin-bottom:10px">🏅</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--forest);margin-bottom:6px">All Modules Complete!</div>
+      <div style="font-size:13px;color:var(--mid);margin-bottom:16px">Congratulations! Your trainer has been notified.<br>Your <strong>Bronze Certificate</strong> will be issued to your email shortly.</div>
+      <button onclick="requestCertificate()" style="background:var(--gold);color:#1A1A1A;border:none;padding:11px 28px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:13px;font-weight:700;cursor:pointer">🏅 Request My Certificate</button>
+    </div>`;
+  }
+
+  list.innerHTML = html;
 }
 
 // ── START MODULE ─────────────────────────────────────────────
@@ -878,6 +888,28 @@ async function startModuleAtIdx(modIdx) {
 
   document.getElementById('prog-wrap').style.display = 'block';
   document.getElementById('prog-mod-label').textContent = mod.id + ' ' + mod.name;
+
+  // Update exam screen header to show the correct module
+  const setTxtEl = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  setTxtEl('q-slbl', mod.id);
+  setTxtEl('q-sname', mod.name);
+  setTxtEl('q-count', 'Q1 of ' + examQs.length);
+  setTxtEl('mod-banner-title', mod.id + ' — ' + mod.name);
+  const iconEl = document.getElementById('q-icon');
+  if (iconEl) iconEl.textContent = mod.icon;
+
+  // Update module progress steps
+  const track = TRACKS[selectedTrack] || TRACKS.technician;
+  const stepsEl = document.getElementById('mod-steps');
+  if (stepsEl) {
+    stepsEl.innerHTML = track.modules.map(mid => {
+      const mi = MODULES.findIndex(m => m.id === mid);
+      const done = modResults[mi] && modResults[mi].passed;
+      const isCur = mid === mod.id;
+      return `<div class="mod-step ${done ? 'done' : isCur ? 'current' : ''}">${mid.replace('M','')}</div>`;
+    }).join('');
+  }
+
   buildExam();
   show('s-exam');
   startTimer();
@@ -1118,6 +1150,26 @@ function buildResult(result, allPassed) {
 function goBackToLadder() {
   renderLadder();
   show('s-ladder');
+}
+
+async function requestCertificate() {
+  if (!tech.email) { alert('Please complete the exam first.'); return; }
+  showToast('Sending certificate request...');
+  const res = await asPost({
+    action: 'sendCertificate',
+    name: tech.name,
+    email: tech.email,
+    company: tech.company,
+    country: tech.country,
+    track: selectedTrack === 'salespoc' ? 'Sales POC' : 'Certified Technician'
+  });
+  if (res && res.success) {
+    showToast('✅ Certificate sent! Check your email. ID: ' + (res.certId || ''));
+    setTimeout(() => showToast(''), 5000);
+  } else {
+    showToast('⚠️ Could not send — contact sohan.j@wolkus.com');
+    setTimeout(() => showToast(''), 4000);
+  }
 }
 
 // ── ADMIN DASHBOARD ──────────────────────────────────────────
