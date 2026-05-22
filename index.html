@@ -468,7 +468,7 @@ body::before{content:"";position:fixed;inset:0;background:repeating-linear-gradi
 // GitHub Pages + Google Apps Script backend
 // ============================================================
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxfgTjCMZiTcWbABeeYL6y9GIgeSlH9F-FkSkCtecCObrd-8fJEPJ2PuhFYzUzdQFUD/exec'; // Replace after deploying Apps Script
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxfgTjCMZiTcWbABeeYL6y9GIgeSlH9F-FkSkCtecCObrd-8fJEPJ2PuhFYzUzdQFUD/exec';
 
 const CFG = {
   EMAIL:    'sohan.j@wolkus.com',
@@ -520,7 +520,7 @@ try { allResults = JSON.parse(localStorage.getItem('fasal_v3') || '[]'); } catch
 
 // ── APPS SCRIPT CALLS ────────────────────────────────────────
 async function asGet(params) {
-  if (false)) return null;
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('YOUR_APPS')) return null;
   const url = APPS_SCRIPT_URL + '?' + new URLSearchParams(params).toString();
   try {
     const r = await fetch(url);
@@ -529,7 +529,7 @@ async function asGet(params) {
 }
 
 async function asPost(body) {
-  if (false)) return null;
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('YOUR_APPS')) return null;
   try {
     const r = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
@@ -760,9 +760,9 @@ function renderLadder() {
     <div><div style="font-weight:700;color:#${track.color};font-size:15px">${track.label}</div>
     <div style="font-size:12px;color:var(--grey)">${track.description}</div></div></div>`;
 
-  const ladderSub = document.getElementById('ladder-sub');
+  const ladderSub = document.getElementById('ladder-sub-el');
   if (ladderSub) ladderSub.textContent = t('ladder_sub');
-  const ladderNote = document.getElementById('ladder-note');
+  const ladderNote = document.getElementById('ladder-note-el');
   if (ladderNote) ladderNote.textContent = t('ladder_note');
 
   MODULES.forEach((mod, idx) => {
@@ -886,7 +886,7 @@ async function startModuleAtIdx(modIdx) {
 
 // ── EXAM UI ──────────────────────────────────────────────────
 function buildExam() {
-  const nav = document.getElementById('q-nav');
+  const nav = document.getElementById('q-palette');
   if (!nav) return;
   nav.innerHTML = examQs.map((_,i) => `<button class="q-dot" id="dot-${i}" onclick="jumpTo(${i})">${i+1}</button>`).join('');
 }
@@ -958,7 +958,7 @@ function updatePalette() {
   examQs.forEach((_, i) => {
     const dot = document.getElementById('dot-'+i);
     if (!dot) return;
-    dot.className = 'q-dot' + (i===curQ?' current':ans[i]===null?' not-visited':ans[i]===-1?' skipped':' answered');
+    dot.className = 'q-dot' + (i===curQ?' cur':ans[i]===null?'':ans[i]===-1?' skipped':' ans');
   });
 }
 
@@ -986,12 +986,12 @@ function confirmSubmit() {
 
   document.getElementById('modal-answered').textContent = answered;
   document.getElementById('modal-skipped').textContent = skipped;
-  document.getElementById('modal-not-visited').textContent = notVisited;
-  document.getElementById('submit-modal').style.display = 'flex';
+  document.getElementById('modal-unanswered').textContent = notVisited;
+  document.getElementById('confirm-modal').classList.add('open');
 }
 
 function closeModal() {
-  document.getElementById('submit-modal').style.display = 'none';
+  document.getElementById('confirm-modal').classList.remove('open');
 }
 
 async function doSubmit() {
@@ -1050,51 +1050,69 @@ async function doSubmit() {
 
 function buildResult(result, allPassed) {
   const pass = result.passed;
-  const icon  = pass ? '🎉' : '📋';
-  const title = pass ? 'Module Passed!' : 'Module Not Passed';
-  const col   = pass ? 'var(--pass)' : 'var(--fail)';
-  const mod   = MODULES[curModIdx];
+  const col  = pass ? 'var(--pass)' : 'var(--fail)';
+  const mod  = MODULES[curModIdx];
 
-  let html = `<div style="text-align:center;margin-bottom:20px">
-    <div style="font-size:56px;margin-bottom:12px">${icon}</div>
-    <div style="font-size:24px;font-weight:700;color:${col};margin-bottom:6px">${title}</div>
-    <div style="font-size:14px;color:var(--grey)">${mod.icon} ${mod.name}</div>
-  </div>
-  <div class="info-grid" style="margin-bottom:20px">
-    <div class="info-tile"><div class="info-val" style="color:${col}">${result.score}/${result.total}</div><div class="info-lbl">Score</div></div>
-    <div class="info-tile"><div class="info-val">${result.pct}%</div><div class="info-lbl">Accuracy</div></div>
-    <div class="info-tile"><div class="info-val">${result.time}</div><div class="info-lbl">Time</div></div>
-  </div>`;
+  // 1 — Header (pass / fail banner)
+  document.getElementById('res-hdr').innerHTML = pass
+    ? `<div class="res-hdr-pass"><span class="res-emoji">🎉</span><div class="res-title">Module Passed!</div><div style="font-size:13px;color:#A5D6A7">${mod.icon} ${mod.name}</div></div>`
+    : `<div class="res-hdr-fail"><span class="res-emoji">📋</span><div class="res-title">Module Not Passed</div><div style="font-size:13px;color:#BCAAA4">${mod.icon} ${mod.name}</div></div>`;
 
-  if (pass) {
-    if (allPassed) {
-      html += `<div style="background:#E8F5E9;border:2px solid #2E7D32;border-radius:12px;padding:18px;text-align:center;margin-bottom:16px">
-        <div style="font-size:28px;margin-bottom:8px">🏅</div>
-        <div style="font-weight:700;color:#1b5e20;font-size:16px;margin-bottom:4px">All Modules Complete!</div>
-        <div style="font-size:13px;color:#555">Your trainer has been notified. Your Bronze Certificate will be issued shortly.</div>
-      </div>`;
-    } else {
-      const track = TRACKS[selectedTrack] || TRACKS.technician;
-      const nextModId = (() => {
-        const ti = track.modules.indexOf(mod.id);
-        return track.modules[ti + 1];
-      })();
-      if (nextModId) {
-        const nextMod = MODULES.find(m => m.id === nextModId);
-        html += `<div style="background:#E3F2FD;border-radius:10px;padding:14px;font-size:13px;color:#1565C0;margin-bottom:16px;text-align:center">
-          ✅ Next up: <strong>${nextMod.name}</strong> is now unlocked!
-        </div>`;
-      }
+  // 2 — Score ring
+  const circumference = 339.3;
+  const offset = circumference - (result.pct / 100) * circumference;
+  const ringFill = document.getElementById('ring-fill');
+  if (ringFill) {
+    ringFill.style.stroke = pass ? 'var(--leaf)' : 'var(--fail)';
+    setTimeout(() => { ringFill.style.strokeDashoffset = offset; }, 50);
+  }
+  const ringNum = document.getElementById('ring-num');
+  if (ringNum) { ringNum.textContent = result.score + '/' + result.total; ringNum.style.color = col; }
+  const ringPct = document.getElementById('ring-pct');
+  if (ringPct) ringPct.textContent = result.pct + '%';
+
+  // 3 — Breakdown tiles
+  document.getElementById('bd-grid').innerHTML = `
+    <div class="bd-tile"><div class="bd-score" style="color:${col}">${result.score}/${result.total}</div><div class="bd-lbl">Score</div></div>
+    <div class="bd-tile"><div class="bd-score">${result.skipped || 0}</div><div class="bd-lbl">Skipped</div></div>
+    <div class="bd-tile"><div class="bd-score">${result.time}</div><div class="bd-lbl">Time Taken</div></div>`;
+
+  // 4 — Detail rows
+  document.getElementById('det-list').innerHTML = `
+    <div class="det-row"><span class="det-lbl">Name</span><span class="det-val">${result.name}</span></div>
+    <div class="det-row"><span class="det-lbl">Company</span><span class="det-val">${result.company}</span></div>
+    <div class="det-row"><span class="det-lbl">Date</span><span class="det-val">${result.date}</span></div>
+    <div class="det-row"><span class="det-lbl">Pass mark</span><span class="det-val">${CFG.PASS_MARK}/${result.total}</span></div>`;
+
+  // 5 — Message
+  let msgHtml = '';
+  if (pass && allPassed) {
+    msgHtml = `<div class="msg-box msg-pass">
+      <strong>🏅 All Modules Complete!</strong><br>
+      Your trainer has been notified. Your Bronze Certificate will be issued shortly.
+    </div>`;
+  } else if (pass) {
+    const track = TRACKS[selectedTrack] || TRACKS.technician;
+    const ti = track.modules.indexOf(mod.id);
+    const nextModId = track.modules[ti + 1];
+    if (nextModId) {
+      const nextMod = MODULES.find(m => m.id === nextModId);
+      msgHtml = `<div class="msg-box msg-pass">✅ Next up: <strong>${nextMod.name}</strong> is now unlocked!</div>`;
     }
   } else {
-    html += `<div style="background:#FFF3E0;border-radius:10px;padding:14px;font-size:13px;color:#E65100;margin-bottom:16px">
-      <strong>Pass mark is ${CFG.PASS_MARK}/${result.total}.</strong> You scored ${result.score}/${result.total}. 
-      You are locked for 24 hours. You can request early approval from the module screen.
+    msgHtml = `<div class="msg-box msg-fail">
+      <strong>Pass mark is ${CFG.PASS_MARK}/${result.total}.</strong> You scored ${result.score}/${result.total}.
+      You are locked for 24 hours — you can request early approval from the module screen.
     </div>`;
   }
+  document.getElementById('res-msg').innerHTML = msgHtml;
 
-  html += `<button class="btn-start" onclick="goBackToLadder()" style="width:100%">← Back to My Progress</button>`;
-  document.getElementById('result-content').innerHTML = html;
+  // 6 — Review (empty for now)
+  document.getElementById('res-review').innerHTML = '';
+
+  // 7 — Action buttons
+  document.getElementById('act-row').innerHTML =
+    `<button class="act-btn act-green" onclick="goBackToLadder()">← Back to My Progress</button>`;
 }
 
 function goBackToLadder() {
@@ -1104,11 +1122,11 @@ function goBackToLadder() {
 
 // ── ADMIN DASHBOARD ──────────────────────────────────────────
 async function openAdmin() {
-  const pwd = document.getElementById('admin-pwd').value;
+  const pwd = prompt('Admin Password:');
+  if (pwd === null) return; // cancelled
   const hash = await hashStr(pwd);
   if (hash !== CFG.ADMIN_HASH) { alert('Wrong password.'); return; }
-  document.getElementById('admin-login').style.display = 'none';
-  document.getElementById('admin-panel').style.display = 'block';
+  document.getElementById('admin-ov').classList.add('open');
   renderAdmin();
 }
 
@@ -1118,15 +1136,12 @@ async function hashStr(str) {
 }
 
 function closeAdmin() {
-  document.getElementById('admin-overlay').style.display = 'none';
-  document.getElementById('admin-login').style.display = 'block';
-  document.getElementById('admin-panel').style.display = 'none';
-  document.getElementById('admin-pwd').value = '';
+  document.getElementById('admin-ov').classList.remove('open');
 }
 
-function setF(filter) {
-  document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('on'));
-  event.target.classList.add('on');
+function setF(filter, btn) {
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
   renderAdmin(filter);
 }
 
@@ -1148,23 +1163,29 @@ function renderAdmin(filter) {
     <div class="stat-tile"><div class="stat-val">${all.length}</div><div class="stat-lbl">Attempts</div></div>
     <div class="stat-tile"><div class="stat-val" style="color:var(--pass)">${ps}</div><div class="stat-lbl">Passed</div></div>
     <div class="stat-tile"><div class="stat-val" style="color:var(--fail)">${fl}</div><div class="stat-lbl">Failed</div></div>
-    <div class="stat-tile"><div class="stat-val" style="color:var(--gold)">${certified.length}</div><div class="stat-lbl">Certified</div></div>`;
+    <div class="stat-tile"><div class="stat-val" style="color:var(--gold)">${certified.length}</div><div class="stat-lbl">Certified</div></div>
+    <div class="stat-tile"><div class="stat-val">${emails.length}</div><div class="stat-lbl">Technicians</div></div>`;
 
   let rows = [...all].reverse();
   if (filter === 'pass') rows = rows.filter(r => r.passed);
   else if (filter === 'fail') rows = rows.filter(r => !r.passed);
+  else if (filter === 'pending') rows = rows.filter(r => !r.passed);
   else if (filter === 'cert') {
-    // Show one row per certified technician
     rows = certified.map(em => {
       const r = all.filter(x => x.email === em);
       return { ...r[r.length-1], _isCert: true };
     });
+  } else if (['M1','M2','M3','M4','M5'].includes(filter)) {
+    rows = rows.filter(r => r.moduleId === filter);
   }
 
-  const tbody = document.getElementById('results-tbody');
-  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--grey)">No results yet</td></tr>'; return; }
+  const tblEl = document.getElementById('adm-tbl');
+  if (!rows.length) { tblEl.innerHTML = '<p style="text-align:center;padding:20px;color:var(--grey)">No results yet</p>'; return; }
 
-  tbody.innerHTML = rows.map(r => {
+  tblEl.innerHTML = `<table class="tbl"><thead><tr>
+    <th>Name</th><th>Email</th><th>Company</th><th>Country</th>
+    <th>Module</th><th>Score</th><th>Status</th><th>Date / Action</th>
+  </tr></thead><tbody>${rows.map(r => {
     const statusBadge = r.passed
       ? `<span style="background:#E8F5E9;color:#2E7D32;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600">✓ PASSED</span>`
       : `<span style="background:#FFEBEE;color:#C62828;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600">✗ FAILED</span>`;
@@ -1187,7 +1208,7 @@ function renderAdmin(filter) {
       <td>${statusBadge}</td>
       <td>${r.date || ''} ${certBtn}</td>
     </tr>`;
-  }).join('');
+  }).join('')}</tbody></table>`;
 }
 
 async function triggerCertificate(email, name, company, country, track) {
