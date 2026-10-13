@@ -72,6 +72,7 @@ body::before{content:"";position:fixed;inset:0;background:repeating-linear-gradi
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
 .form-grp{margin-bottom:14px}
 .form-lbl{display:block;font-size:11px;font-weight:600;color:var(--mid);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
+.reg-fields{display:grid;grid-template-columns:1fr;gap:14px;max-width:520px;margin:0 auto}
 .form-inp,.form-sel{width:100%;padding:11px 14px;border:1.5px solid #DDE8DD;border-radius:8px;font-family:"DM Sans",sans-serif;font-size:13.5px;color:var(--dark);background:#fff;outline:none;transition:border-color .2s}
 .form-inp:focus,.form-sel:focus{border-color:var(--leaf);box-shadow:0 0 0 3px rgba(76,175,80,.1)}
 .btn-start{width:100%;padding:15px;background:linear-gradient(135deg,var(--forest),var(--green));color:#fff;border:none;border-radius:10px;font-family:"DM Sans",sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s}
@@ -244,22 +245,14 @@ body::before{content:"";position:fixed;inset:0;background:repeating-linear-gradi
     <div class="info-grid">
       <div class="info-tile"><div class="info-val">5</div><div class="info-lbl">Modules</div></div>
       <div class="info-tile"><div class="info-val">10</div><div class="info-lbl">Questions each</div></div>
-      <div class="info-tile"><div class="info-val">7/10</div><div class="info-lbl">Pass mark</div></div>
+      <div class="info-tile"><div class="info-val">8/10</div><div class="info-lbl">Pass mark</div></div>
     </div>
   </div>
   <div class="card-body" style="background:#F8FFFE;border-top:1px solid #E8F5E9;border-bottom:1px solid #E8F5E9">
-    <div class="form-row">
-      <div class="form-grp"><label class="form-lbl" id="lbl-name">Full Name *</label><input type="text" class="form-inp" id="f-name" placeholder="e.g. Jose Reyes" autocomplete="name"></div>
-      <div class="form-grp"><label class="form-lbl" id="lbl-email">Email Address *</label><input type="email" class="form-inp" id="f-email" placeholder="jose@company.com" autocomplete="email"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-grp"><label class="form-lbl" id="lbl-company">Distributor Company *</label><select class="form-sel" id="f-company" onchange="onCompanyChange()"><option value="">Select distributor...</option></select></div>
-      <div class="form-grp"><label class="form-lbl" id="lbl-country">Country *</label>
-        <select class="form-sel" id="f-country">
-          <option value="">Select your country...</option>
-          <option>Thailand</option><option>Philippines</option><option>Malaysia</option><option>Vietnam</option><option>Indonesia</option>
-        </select>
-      </div>
+    <div id="reg-fields" class="reg-fields">
+      <div class="form-grp" id="grp-company"><label class="form-lbl" id="lbl-company">Distributor Company *</label><select class="form-sel" id="f-company" onchange="onCompanyChange()"><option value="">Loading distributors...</option></select></div>
+      <div class="form-grp" id="grp-name"><label class="form-lbl" id="lbl-name">Full Name *</label><input type="text" class="form-inp" id="f-name" placeholder="e.g. Jose Reyes" autocomplete="name"></div>
+      <div class="form-grp" id="grp-email"><label class="form-lbl" id="lbl-email">Email Address *</label><input type="email" class="form-inp" id="f-email" placeholder="jose@company.com" autocomplete="email"></div>
     </div>
   </div>
   <div class="card-body">
@@ -287,7 +280,7 @@ body::before{content:"";position:fixed;inset:0;background:repeating-linear-gradi
           &#128295; M2 &mdash; Hardware &amp; Sensors<br>
           &#128241; M3 &mdash; Fasal Application
         </div>
-        <div style="background:#1565C0;color:#fff;border-radius:8px;padding:8px;font-size:11px;font-weight:700">3 Modules &middot; 7/10 Pass Mark</div>
+        <div style="background:#1565C0;color:#fff;border-radius:8px;padding:8px;font-size:11px;font-weight:700">3 Modules &middot; 8/10 Pass Mark</div>
       </div>
       <div onclick="selectTrack('technician')" style="background:#E8F5E9;border:2px solid #1A5C1A;border-radius:14px;padding:24px;cursor:pointer;transition:all .2s;text-align:center" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
         <div style="font-size:40px;margin-bottom:10px">&#128295;</div>
@@ -300,7 +293,7 @@ body::before{content:"";position:fixed;inset:0;background:repeating-linear-gradi
           &#128205; M4 &mdash; Installation &amp; Deployment<br>
           &#128295; M5 &mdash; Troubleshooting &amp; After-Sales SOP
         </div>
-        <div style="background:#1A5C1A;color:#fff;border-radius:8px;padding:8px;font-size:11px;font-weight:700">5 Modules &middot; 7/10 Pass Mark</div>
+        <div style="background:#1A5C1A;color:#fff;border-radius:8px;padding:8px;font-size:11px;font-weight:700">5 Modules &middot; 8/10 Pass Mark</div>
       </div>
     </div>
   </div>
@@ -315,7 +308,7 @@ body::before{content:"";position:fixed;inset:0;background:repeating-linear-gradi
 <div class="wrap"><div class="card">
   <div class="card-body">
     <div class="hero-title" style="margin-bottom:6px">Your Certification Ladder</div>
-    <p style="font-size:13px;color:var(--grey);font-style:italic;margin-bottom:20px" id="ladder-sub-el">Complete each module in order. Pass 7/10 to unlock the next level.</p>
+    <p style="font-size:13px;color:var(--grey);font-style:italic;margin-bottom:20px" id="ladder-sub-el">Complete each module in order. Pass 8/10 to unlock the next level.</p>
     <div class="module-list" id="module-list"></div>
     <div style="font-size:11px;color:var(--grey);text-align:center;margin-top:8px" id="ladder-note-el">
       &#128161; Skip questions and return later &mdash; skipped questions are excluded from your score
@@ -382,7 +375,7 @@ body::before{content:"";position:fixed;inset:0;background:repeating-linear-gradi
       <div class="modal-stat skipped"><div class="modal-val" id="modal-skipped" style="color:var(--skip)">0</div><div class="modal-lbl">Skipped</div></div>
       <div class="modal-stat unanswered"><div class="modal-val" id="modal-unanswered" style="color:var(--warn)">0</div><div class="modal-lbl">Not Visited</div></div>
     </div>
-    <div class="modal-note">Skipped questions are <strong>excluded from scoring</strong>. You need <strong>7 correct answers</strong> to pass.</div>
+    <div class="modal-note">Skipped questions are <strong>excluded from scoring</strong>. You need <strong>8 correct answers</strong> to pass.</div>
     <div class="modal-btns">
       <button class="btn-modal-cancel" onclick="closeModal()">Go Back &amp; Review</button>
       <button class="btn-modal-confirm" onclick="doSubmit()">Confirm Submit &#10003;</button>
@@ -431,7 +424,7 @@ body::before{content:"";position:fixed;inset:0;background:repeating-linear-gradi
   <div class="admin-ph">
     <div>
       <div style="font-size:16px;font-weight:700;color:#fff">&#128202; Results Dashboard</div>
-      <div style="font-size:11px;color:#A5D6A7;margin-top:2px">Fasal SEA &middot; 5 Modules &middot; 7/10 Pass Mark</div>
+      <div style="font-size:11px;color:#A5D6A7;margin-top:2px">Fasal SEA &middot; 5 Modules &middot; 8/10 Pass Mark</div>
     </div>
     <button class="admin-close" onclick="closeAdmin()">&#10005;</button>
   </div>
@@ -472,7 +465,10 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxfgTjCMZiTcWbA
 
 const CFG = {
   EMAIL:    'sohan.j@wolkus.com',
-  PASS_MARK: 7,
+  PASS_MARK: 8,
+  PASS_PCT: 80,
+  CHECKLIST_URL: '',
+  CERT_NOTE: '',
   Qs_PER_MODULE: 10,
   TIME_SECS: 900,
   ADMIN_HASH: '4e0c3107b0b21fbd8254669c4b51e4c658b15e52924b5900e880d6bf07eee69e',
@@ -496,7 +492,7 @@ const TRACKS = {
   }
 };
 
-const MODULES = [
+let MODULES = [
   {id:'M1', name:'Product Knowledge',                 icon:'🌾', section:'A', color:'1A5C1A'},
   {id:'M2', name:'Hardware & Sensors',                icon:'🔧', section:'B', color:'1565C0'},
   {id:'M3', name:'Fasal Application',                 icon:'📱', section:'D', color:'6A1B9A'},
@@ -509,6 +505,8 @@ let curLang = 'en';
 let selectedTrack = null;
 let tech = {};          // {name, email, company, pocEmail, country}
 let modResults = Array(5).fill(null);
+let adminPwd = '';
+let configLoaded = false;
 let allResults = [];
 let curModIdx = 0;
 let examQs = [], curQ = 0, ans = [];
@@ -542,32 +540,72 @@ async function asPost(body) {
   } catch(e) { console.warn('AS POST failed:', e); return null; }
 }
 
-// ── DISTRIBUTORS ─────────────────────────────────────────────
-async function loadDistributors(country) {
-  const sel = document.getElementById('f-company');
-  sel.innerHTML = '<option value="">Loading...</option>';
-  distributorMap = {};
 
-  const data = await asGet({action:'distributors', country});
-  const list = data && data.distributors ? data.distributors : [];
-
-  sel.innerHTML = '<option value="">Select distributor...</option>';
-  list.forEach(d => {
-    const opt = document.createElement('option');
-    opt.value = d.company;
-    opt.textContent = d.company;
-    sel.appendChild(opt);
-    distributorMap[d.company] = d.pocEmail || '';
-  });
-
-  if (!list.length) {
-    sel.innerHTML = '<option value="">No distributors for this country yet</option>';
+// ── CONFIG FROM THE SHEET (Settings + Modules tabs) ─────────
+async function loadConfig() {
+  const c = await asGet({action:'config'});
+  if (!c || !c.modules || !c.modules.length) return;
+  CFG.PASS_PCT = c.passPercent;
+  CFG.Qs_PER_MODULE = c.questionsPerModule;
+  CFG.PASS_MARK = c.passMark;
+  CFG.TIME_SECS = c.timeLimitSecs;
+  CFG.CHECKLIST_URL = c.checklistUrl || '';
+  CFG.CERT_NOTE = c.certificateNote || '';
+  MODULES = c.modules.map(m => ({ id: m.id, name: m.name, icon: m.icon || '📘', section: m.section, color: '1A5C1A' }));
+  TRACKS.technician.modules = MODULES.map(m => m.id);
+  TRACKS.technician.description = MODULES.length + ' modules';
+  modResults = Array(MODULES.length).fill(null);
+  secsLeft = CFG.TIME_SECS;
+  // Replace the pass-mark text everywhere (page and all languages)
+  const pm = CFG.PASS_MARK + '/' + CFG.Qs_PER_MODULE;
+  Object.values(LANG).forEach(L => Object.keys(L).forEach(k => { if (typeof L[k] === 'string') L[k] = L[k].replace(/8\/10/g, pm); }));
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  let n; while ((n = walker.nextNode())) {
+    if (n.nodeValue.includes('8/10')) n.nodeValue = n.nodeValue.replace(/8\/10/g, pm);
+    if (/^\s*8 correct answers\s*$/.test(n.nodeValue)) n.nodeValue = CFG.PASS_MARK + ' correct answers';
+    if (n.nodeValue.trim() === '5' && n.parentElement && n.parentElement.classList.contains('info-val') && n.parentElement.nextElementSibling && /Modules/.test(n.parentElement.nextElementSibling.textContent)) n.nodeValue = String(MODULES.length);
+    if (n.nodeValue.trim() === '10' && n.parentElement && n.parentElement.classList.contains('info-val')) n.nodeValue = String(CFG.Qs_PER_MODULE);
   }
+  applyFieldOrder(c.startPageFields || []);
+  configLoaded = true;
+  applyLang();
+}
+
+// Order of the start-page fields comes from the Settings tab (START_PAGE_FIELDS)
+function applyFieldOrder(order) {
+  const map = { 'distributor': 'grp-company', 'full name': 'grp-name', 'name': 'grp-name', 'email': 'grp-email' };
+  const box = document.getElementById('reg-fields');
+  if (!box) return;
+  const seen = new Set();
+  order.map(x => map[String(x).toLowerCase()]).filter(Boolean).forEach(id => {
+    const el = document.getElementById(id);
+    if (el && !seen.has(id)) { box.appendChild(el); seen.add(id); }
+  });
+  ['grp-company','grp-name','grp-email'].forEach(id => { if (!seen.has(id)) { const el = document.getElementById(id); if (el) box.appendChild(el); } });
+}
+
+// ── DISTRIBUTORS ─────────────────────────────────────────────
+async function loadDistributors() {
+  const sel = document.getElementById('f-company');
+  distributorMap = {};
+  const data = await asGet({action:'distributors', country: ''});
+  const list = data && data.distributors ? data.distributors : [];
+  sel.innerHTML = '<option value="">Select your distributor...</option>';
+  const byCountry = {};
+  list.forEach(d => { (byCountry[d.country] = byCountry[d.country] || []).push(d); distributorMap[d.company] = { pocEmail: d.pocEmail || '', country: d.country || '' }; });
+  Object.keys(byCountry).sort().forEach(country => {
+    const g = document.createElement('optgroup'); g.label = country;
+    byCountry[country].forEach(d => { const o = document.createElement('option'); o.value = d.company; o.textContent = d.company; g.appendChild(o); });
+    sel.appendChild(g);
+  });
+  if (!list.length) sel.innerHTML = '<option value="">Could not load distributors — contact sohan.j@wolkus.com</option>';
 }
 
 function onCompanyChange() {
   const company = document.getElementById('f-company').value;
-  tech.pocEmail = distributorMap[company] || '';
+  const d = distributorMap[company] || {};
+  tech.pocEmail = d.pocEmail || '';
+  tech.country = d.country || '';
 }
 
 // ── FETCH QUESTIONS FROM APPS SCRIPT ─────────────────────────
@@ -621,7 +659,7 @@ const LANG = {
   en:{ lbl_name:'Full Name', lbl_email:'Email Address', lbl_company:'Distributor Company', lbl_country:'Country',
     btn_start:'Continue to Certification →', sel_country:'Select your country...',
     country_th:'Thailand', country_ph:'Philippines', country_my:'Malaysia', country_vn:'Vietnam', country_id:'Indonesia',
-    ladder_sub:'Complete each module in order. Pass 7/10 to unlock the next level.',
+    ladder_sub:'Complete each module in order. Pass 8/10 to unlock the next level.',
     ladder_note:'💡 Skip questions and return later — skipped questions are excluded from your score',
     badge_pass:'✓ PASSED', badge_fail:'✗ FAILED', badge_locked:'🔒 Locked',
     badge_ready:'→ Start', badge_pending:'⏳ Approval Pending',
@@ -631,7 +669,7 @@ const LANG = {
   th:{ lbl_name:'ชื่อเต็ม', lbl_email:'ที่อยู่อีเมล', lbl_company:'บริษัทผู้จัดจำหน่าย', lbl_country:'ประเทศ',
     btn_start:'ดำเนินการต่อ →', sel_country:'เลือกประเทศ...',
     country_th:'ไทย', country_ph:'ฟิลิปปินส์', country_my:'มาเลเซีย', country_vn:'เวียดนาม', country_id:'อินโดนีเซีย',
-    ladder_sub:'ทำแต่ละโมดูลตามลำดับ ผ่าน 7/10 เพื่อปลดล็อค',
+    ladder_sub:'ทำแต่ละโมดูลตามลำดับ ผ่าน 8/10 เพื่อปลดล็อค',
     ladder_note:'💡 ข้ามคำถามได้ — คำถามที่ข้ามจะไม่นับคะแนน',
     badge_pass:'✓ ผ่าน', badge_fail:'✗ ไม่ผ่าน', badge_locked:'🔒 ล็อค',
     badge_ready:'→ เริ่ม', badge_pending:'⏳ รอการอนุมัติ',
@@ -641,7 +679,7 @@ const LANG = {
   id:{ lbl_name:'Nama Lengkap', lbl_email:'Alamat Email', lbl_company:'Perusahaan Distributor', lbl_country:'Negara',
     btn_start:'Lanjutkan ke Sertifikasi →', sel_country:'Pilih negara...',
     country_th:'Thailand', country_ph:'Filipina', country_my:'Malaysia', country_vn:'Vietnam', country_id:'Indonesia',
-    ladder_sub:'Selesaikan setiap modul secara berurutan. Lulus 7/10 untuk membuka level berikutnya.',
+    ladder_sub:'Selesaikan setiap modul secara berurutan. Lulus 8/10 untuk membuka level berikutnya.',
     ladder_note:'💡 Lewati pertanyaan dan kembali nanti — pertanyaan yang dilewati tidak dihitung',
     badge_pass:'✓ LULUS', badge_fail:'✗ GAGAL', badge_locked:'🔒 Terkunci',
     badge_ready:'→ Mulai', badge_pending:'⏳ Menunggu Persetujuan',
@@ -651,7 +689,7 @@ const LANG = {
   ms:{ lbl_name:'Nama Penuh', lbl_email:'Alamat E-mel', lbl_company:'Syarikat Pengedar', lbl_country:'Negara',
     btn_start:'Teruskan ke Pensijilan →', sel_country:'Pilih negara anda...',
     country_th:'Thailand', country_ph:'Filipina', country_my:'Malaysia', country_vn:'Vietnam', country_id:'Indonesia',
-    ladder_sub:'Lengkapkan setiap modul mengikut urutan. Lulus 7/10 untuk membuka tahap seterusnya.',
+    ladder_sub:'Lengkapkan setiap modul mengikut urutan. Lulus 8/10 untuk membuka tahap seterusnya.',
     ladder_note:'💡 Langkau soalan dan kembali kemudian — soalan yang dilangkau tidak dikira',
     badge_pass:'✓ LULUS', badge_fail:'✗ GAGAL', badge_locked:'🔒 Dikunci',
     badge_ready:'→ Mula', badge_pending:'⏳ Menunggu Kelulusan',
@@ -661,7 +699,7 @@ const LANG = {
   vi:{ lbl_name:'Họ và tên', lbl_email:'Địa chỉ Email', lbl_company:'Công ty Phân phối', lbl_country:'Quốc gia',
     btn_start:'Tiếp tục chứng nhận →', sel_country:'Chọn quốc gia...',
     country_th:'Thái Lan', country_ph:'Philippines', country_my:'Malaysia', country_vn:'Việt Nam', country_id:'Indonesia',
-    ladder_sub:'Hoàn thành từng module theo thứ tự. Đạt 7/10 để mở khóa cấp độ tiếp theo.',
+    ladder_sub:'Hoàn thành từng module theo thứ tự. Đạt 8/10 để mở khóa cấp độ tiếp theo.',
     ladder_note:'💡 Bỏ qua câu hỏi và quay lại sau — câu hỏi bỏ qua không tính điểm',
     badge_pass:'✓ ĐẠT', badge_fail:'✗ TRƯỢT', badge_locked:'🔒 Khóa',
     badge_ready:'→ Bắt đầu', badge_pending:'⏳ Đang chờ phê duyệt',
@@ -671,7 +709,7 @@ const LANG = {
   fil:{ lbl_name:'Buong Pangalan', lbl_email:'Email Address', lbl_company:'Kumpanya ng Distributor', lbl_country:'Bansa',
     btn_start:'Magpatuloy sa Sertipikasyon →', sel_country:'Pumili ng bansa...',
     country_th:'Thailand', country_ph:'Pilipinas', country_my:'Malaysia', country_vn:'Vietnam', country_id:'Indonesia',
-    ladder_sub:'Kumpletuhin ang bawat module sa pagkakasunod. Pumasa ng 7/10 para ma-unlock ang susunod.',
+    ladder_sub:'Kumpletuhin ang bawat module sa pagkakasunod. Pumasa ng 8/10 para ma-unlock ang susunod.',
     ladder_note:'💡 Laktawan ang mga tanong at bumalik mamaya — hindi binibilang ang nalaktawang tanong',
     badge_pass:'✓ PUMASA', badge_fail:'✗ BUMAGSAK', badge_locked:'🔒 Naka-lock',
     badge_ready:'→ Simulan', badge_pending:'⏳ Naghihintay ng Approval',
@@ -705,28 +743,30 @@ function show(id) {
 }
 
 // ── REGISTRATION ─────────────────────────────────────────────
-function goToTrack() {
+async function goToTrack() {
   const name    = document.getElementById('f-name').value.trim();
-  const email   = document.getElementById('f-email').value.trim();
+  const email   = document.getElementById('f-email').value.trim().toLowerCase();
   const company = document.getElementById('f-company').value.trim();
-  const country = document.getElementById('f-country').value;
-  if (!name||!email||!company||!country) { alert('Please fill in all fields.'); return; }
+  if (!name||!email||!company) { alert('Please fill in all fields.'); return; }
   if (!/\S+@\S+\.\S+/.test(email)) { alert('Please enter a valid email address.'); return; }
-  tech = { name, email, company, pocEmail: distributorMap[company]||'', country };
-  loadTechProgress();
-  show('s-track');
+  const d = distributorMap[company] || {};
+  tech = { name, email, company, pocEmail: d.pocEmail || '', country: d.country || '' };
+  showToast('Loading your progress...');
+  const prog = await asGet({action:'progress', email});
+  showToast('');
+  modResults = Array(MODULES.length).fill(null);
+  if (prog && prog.results) {
+    prog.results.forEach(r => { const i = MODULES.findIndex(m => m.id === r.moduleId); if (i >= 0) modResults[i] = r; });
+    serverProgress = true;
+  }
+  selectTrack('technician');
 }
+let serverProgress = false;
 
 // Country change → load distributor list
-document.addEventListener('DOMContentLoaded', () => {
-  const countrySel = document.getElementById('f-country');
-  if (countrySel) {
-    countrySel.addEventListener('change', async () => {
-      const country = countrySel.value;
-      if (country) await loadDistributors(country);
-      else { document.getElementById('f-company').innerHTML = '<option value="">Select distributor...</option>'; }
-    });
-  }
+document.addEventListener('DOMContentLoaded', async () => {
+  loadConfig();
+  loadDistributors();
   try { curLang = localStorage.getItem('fasal_lang') || 'en'; setLang(curLang); } catch(e){}
   checkApprovalURL();
 });
@@ -734,7 +774,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ── TRACK SELECTION ──────────────────────────────────────────
 function selectTrack(trackId) {
   selectedTrack = trackId;
-  loadTechProgress();
+  if (!serverProgress) loadTechProgress();
   renderLadder();
   show('s-ladder');
 }
@@ -817,8 +857,8 @@ function renderLadder() {
     html += `<div style="background:linear-gradient(135deg,#E8F5E9,#FFF8E1);border:2px solid var(--leaf);border-radius:14px;padding:22px;text-align:center;margin-top:8px">
       <div style="font-size:40px;margin-bottom:10px">🏅</div>
       <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--forest);margin-bottom:6px">All Modules Complete!</div>
-      <div style="font-size:13px;color:var(--mid);margin-bottom:16px">Congratulations! Your trainer has been notified.<br>Your <strong>Bronze Certificate</strong> will be issued to your email shortly.</div>
-      <button onclick="requestCertificate()" style="background:var(--gold);color:#1A1A1A;border:none;padding:11px 28px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:13px;font-weight:700;cursor:pointer">🏅 Request My Certificate</button>
+      <div style="font-size:13px;color:var(--mid);margin-bottom:16px">All modules passed. ${CFG.CERT_NOTE}</div>
+      <a href="${CFG.CHECKLIST_URL}" target="_blank" rel="noopener" style="display:inline-block;background:var(--gold);color:#1A1A1A;text-decoration:none;padding:11px 28px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:13px;font-weight:700">📋 Open Installation Checklist</a>
     </div>`;
   }
 
@@ -1030,15 +1070,26 @@ async function doSubmit() {
   clearInterval(timerID);
   document.getElementById('prog-wrap').style.display = 'none';
 
-  // Score: correct out of TOTAL SERVED (not just answered)
-  let correct = 0;
-  examQs.forEach((q, i) => {
-    if (ans[i] !== null && ans[i] !== -1 && ans[i] === q.a) correct++;
-  });
   const totalServed = examQs.length;
   const skipped = ans.filter(a => a === -1).length;
-  const pct = Math.round((correct / totalServed) * 100);
-  const passed = correct >= CFG.PASS_MARK;
+  const timeTakenS = Math.round((Date.now() - t0) / 1000);
+  showToast('Submitting your answers...');
+  const graded = await asPost({
+    action: 'submitExam',
+    name: tech.name, email: tech.email, company: tech.company, country: tech.country,
+    moduleId: MODULES[curModIdx].id, moduleName: MODULES[curModIdx].name,
+    timeSecs: timeTakenS,
+    answers: examQs.map((q, i) => ({ id: q.id, choice: (ans[i] === null || ans[i] === -1) ? -1 : ans[i] }))
+  });
+  showToast('');
+  if (!graded || !graded.success) {
+    alert('Your answers could not be submitted (no connection). Please check your internet and press Submit again.');
+    document.getElementById('prog-wrap').style.display = 'block';
+    return;
+  }
+  const correct = graded.score;
+  const pct = graded.pct;
+  const passed = graded.passed;
 
   const timeTaken = Math.round((Date.now() - t0) / 1000);
   const mi = Math.floor(timeTaken/60), se2 = timeTaken % 60;
@@ -1061,19 +1112,7 @@ async function doSubmit() {
   allResults.push(result);
   try { localStorage.setItem('fasal_v3', JSON.stringify(allResults)); } catch(e) {}
 
-  // Check if all modules passed
-  const track = TRACKS[selectedTrack] || TRACKS.technician;
-  const allModulesPassed = track.modules.every(mid => {
-    const idx = MODULES.findIndex(m => m.id === mid);
-    return modResults[idx] && modResults[idx].passed;
-  });
-
-  // Send to Apps Script (non-blocking)
-  asPost({
-    action: 'saveAttempt',
-    ...result,
-    allModulesPassed
-  });
+  const allModulesPassed = graded.allModulesPassed;
 
   buildResult(result, allModulesPassed);
   show('s-result');
@@ -1120,7 +1159,7 @@ function buildResult(result, allPassed) {
   if (pass && allPassed) {
     msgHtml = `<div class="msg-box msg-pass">
       <strong>🏅 All Modules Complete!</strong><br>
-      Your trainer has been notified. Your Bronze Certificate will be issued shortly.
+      ${CFG.CERT_NOTE}<br><a href="${CFG.CHECKLIST_URL}" target="_blank" rel="noopener">📋 Open Installation Checklist</a>
     </div>`;
   } else if (pass) {
     const track = TRACKS[selectedTrack] || TRACKS.technician;
@@ -1177,6 +1216,7 @@ async function openAdmin() {
   if (pwd === null) return; // cancelled
   const hash = await hashStr(pwd);
   if (hash !== CFG.ADMIN_HASH) { alert('Wrong password.'); return; }
+  adminPwd = pwd;
   document.getElementById('admin-ov').classList.add('open');
   renderAdmin();
 }
@@ -1196,8 +1236,16 @@ function setF(filter, btn) {
   renderAdmin(filter);
 }
 
-function renderAdmin(filter) {
-  const all = JSON.parse(localStorage.getItem('fasal_v3') || '[]');
+let adminCache = null;
+async function renderAdmin(filter) {
+  if (!adminCache) {
+    document.getElementById('adm-tbl').innerHTML = '<p style="text-align:center;padding:20px;color:var(--grey)">Loading results from the sheet...</p>';
+    const res = await asPost({action:'adminResults', pwd: adminPwd});
+    if (!res || res.error) { document.getElementById('adm-tbl').innerHTML = '<p style="text-align:center;padding:20px;color:var(--fail)">Could not load results.</p>'; return; }
+    adminCache = res;
+  }
+  const all = adminCache.results;
+  const sentCerts = adminCache.certifiedEmails || [];
   const ps  = all.filter(r => r.passed).length;
   const fl  = all.filter(r => !r.passed).length;
 
@@ -1226,7 +1274,7 @@ function renderAdmin(filter) {
       const r = all.filter(x => x.email === em);
       return { ...r[r.length-1], _isCert: true };
     });
-  } else if (['M1','M2','M3','M4','M5'].includes(filter)) {
+  } else if (MODULES.some(m => m.id === filter)) {
     rows = rows.filter(r => r.moduleId === filter);
   }
 
@@ -1243,7 +1291,8 @@ function renderAdmin(filter) {
 
     // Check if this email is fully certified
     const isCert = certified.includes(r.email);
-    const certBtn = isCert && r.passed
+    const already = sentCerts.includes(String(r.email).toLowerCase());
+    const certBtn = already ? '<span style="font-size:11px;color:var(--pass);font-weight:600">🏅 Cert sent</span>' : isCert && r.passed
       ? `<button onclick="triggerCertificate('${r.email}','${r.name}','${r.company}','${r.country}','${r.track||'technician'}')"
            style="background:#4a148c;color:white;border:none;padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-weight:600">
            🏅 Send Cert</button>`
@@ -1263,17 +1312,18 @@ function renderAdmin(filter) {
 }
 
 async function triggerCertificate(email, name, company, country, track) {
-  if (!confirm(`Send Bronze Certificate to ${name} (${email})?`)) return;
+  if (!confirm(`Send Bronze Certificate to ${name} (${email})?\n\nOnly continue if you have verified their installation checklist.`)) return;
   showToast('Sending certificate...');
 
   const res = await asPost({
-    action: 'sendCertificate',
+    action: 'sendCertificate', pwd: adminPwd,
     name, email, company, country,
-    track: track === 'salespoc' ? 'Sales POC' : 'Certified Technician'
+    track: 'Certified Technician'
   });
 
   if (res && res.success) {
     showToast(`✅ Certificate sent! ID: ${res.certId}`);
+    adminCache = null; renderAdmin();
     // Mark in localStorage
     try {
       const certs = JSON.parse(localStorage.getItem('fasal_certs_v3') || '{}');
@@ -1287,7 +1337,7 @@ async function triggerCertificate(email, name, company, country, track) {
 }
 
 function exportCSV() {
-  const d = JSON.parse(localStorage.getItem('fasal_v3') || '[]');
+  const d = (adminCache && adminCache.results) || [];
   if (!d.length) { alert('No results yet.'); return; }
   const h = ['Name','Email','Company','Country','Track','Module','Score','Total','Pct','Passed','TimeTaken','Date'];
   const rows = d.map(r => [
